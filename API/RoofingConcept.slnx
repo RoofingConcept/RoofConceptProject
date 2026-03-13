@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="RoofingConcept.API/RoofingConcept.API.csproj" />
+  <Project Path="RoofingConcept.Business/RoofingConcept.Business.csproj" />
+  <Project Path="RoofingConcept.Data/RoofingConcept.Data.csproj" />
+</Solution>

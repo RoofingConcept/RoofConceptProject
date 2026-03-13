@@ -1,0 +1,27 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Git / tooling temp
+*.log
+*.tmp
+
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+
+# Local .NET CLI home used in this workspace
+API/.dotnet/
+
+# Node / frontend
+**/node_modules/
+**/dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
