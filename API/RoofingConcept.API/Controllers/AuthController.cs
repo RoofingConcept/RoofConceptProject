@@ -1,5 +1,3 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RoofingConcept.API.ViewModels;
 using RoofingConcept.Business.Dtos;
@@ -14,11 +12,11 @@ public class AuthController(IAuthService authService) : ControllerBase
     private readonly IAuthService _authService = authService;
 
     [HttpPost("signup")]
-    public async Task<IActionResult> SignIn(SignUpViewModel signUpVM)
+    public async Task<IActionResult> SignUp(SignUpViewModel signUpVM)
     {
         if (signUpVM == null)
         {
-            return NoContent();
+            return BadRequest(new { error = "Request body is required." });
         }
 
         var dto = new SignUpDto
@@ -29,14 +27,19 @@ public class AuthController(IAuthService authService) : ControllerBase
 
         var result = await _authService.SignUpAsync(dto);
 
-        return result.Success 
-            ? Ok(result) 
-            : BadRequest();
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
     }
 
     [HttpPost("signin")]
     public async Task<IActionResult> SignIn(SignInViewModel signInVM)
     {
+        if (signInVM == null)
+        {
+            return BadRequest(new { error = "Request body is required." });
+        }
+
         var dto = new SignInDto
         {
             Email = signInVM.Email,
@@ -47,16 +50,16 @@ public class AuthController(IAuthService authService) : ControllerBase
 
         return result.Success
             ? Ok(result)
-            : BadRequest();
+            : BadRequest(result);
     }
 
     [HttpPost("signout")]
-    public async Task<IActionResult> SignOut()
+    public async Task<IActionResult> SignOutUser()
     {
         var result = await _authService.SignOutAsync();
 
-            return result.Success
+        return result.Success
             ? Ok(result)
-            : BadRequest();
+            : BadRequest(result);
     }
 }
