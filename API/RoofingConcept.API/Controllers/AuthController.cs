@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoofingConcept.API.ViewModels;
 using RoofingConcept.Business.Dtos;
 using RoofingConcept.Business.Services;
+using System.Security.Claims;
 
 namespace RoofingConcept.API.Controllers;
 
@@ -48,18 +50,32 @@ public class AuthController(IAuthService authService) : ControllerBase
 
         var result = await _authService.SignInAsync(dto);
 
+        return result.Result?.Success == true
+            ? Ok(result)
+            : Unauthorized(result);
+    }
+
+    [Authorize]
+    [HttpPost("signout")]
+    public async Task<IActionResult> SignOutUser()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var result = await _authService.SignOutAsync(userId);
+
         return result.Success
             ? Ok(result)
             : BadRequest(result);
     }
 
-    [HttpPost("signout")]
-    public async Task<IActionResult> SignOutUser()
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> Me()
     {
-        var result = await _authService.SignOutAsync();
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = await _authService.GetCurrentUserAsync(userId);
 
-        return result.Success
-            ? Ok(result)
-            : BadRequest(result);
+        return user == null
+            ? Unauthorized()
+            : Ok(user);
     }
 }

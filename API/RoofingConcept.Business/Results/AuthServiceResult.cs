@@ -11,4 +11,5 @@ public class AuthServiceResult<T> where T : ServiceResult
 
 public class AuthServiceResult : ServiceResult
 {
+  
 }
